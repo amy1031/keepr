@@ -12,6 +12,15 @@ const models = {
     endpoint: 'users',
     preventDefaultApi: true,
     useCustomRoutes: true
+  },
+  vault: {
+
+  },
+  keep: {
+
+  },
+  dashboard: {
+    
   }
 }
 
