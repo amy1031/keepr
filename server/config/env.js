@@ -5,7 +5,7 @@ let env = {
 	DBPROTOCOL: 'mongodb',
 	DBUSERNAME: 'adminamy',
 	DBPASSWORD: 'adminamy',
-	DBHOST: 'ds135912.mlab.com:35912/keeprdb',
+	DBHOST: 'ds135912.mlab.com:35912',
 	DBNAME: 'keeprdb',
 	SERVERNAME: 'dev-server'
 }

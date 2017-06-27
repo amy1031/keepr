@@ -13,17 +13,15 @@ const models = {
     preventDefaultApi: true,
     useCustomRoutes: true
   },
-  vault: {
-
-  },
   keep: {
-
+    name: 'Keep',
+    endpoint: 'keeps'
   },
-  dashboard: {
-    
+  vault: {
+    name: 'Vault',
+    endpoint: 'vaults'
   }
 }
-
 
 export  {
   actions,

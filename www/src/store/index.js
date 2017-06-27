@@ -1,4 +1,9 @@
 import axios from 'axios'
+import router from '../router'
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
 
 let api = axios.create({
   baseURL: 'http://localhost:3000/api/',
@@ -6,10 +11,17 @@ let api = axios.create({
   withCredentials: true
 })
 
+let auth = axios.create({
+  baseURL: 'http://localhost:3000/',
+  timeout: 2000,
+  withCredentials: true
+})
+
+
 // REGISTER ALL DATA HERE
 let state = {
   user: {},
-  myVaults: {},
+  vaults: {},
   myKeeps: {},
   //Dummy Data
   keeps: [{
@@ -68,12 +80,64 @@ let handleError = (err) => {
   state.error = err
 }
 
-export default {
-  // ALL DATA LIVES IN THE STATE
+export default new Vuex.Store({
   state,
-  // ACTIONS ARE RESPONSIBLE FOR MANAGING ALL ASYNC REQUESTS
+  mutations: {
+    setUser(state, user) {
+      state.user = user
+      router.push('/')
+    },
+    setVaults(state, vaults) {
+      state.vaults = vaults
+    },
+    setKeeps(state, keeps) {
+      state.myKeeps = keeps
+    }
+  },
   actions: {
+    register({ commit, dispatch }, user) {
+      auth.post('register', user)
+        .then(res => {
+          if (res.data.error) {
+            return handleError(res.data.error)
+          }
+          commit('setUser', res.data.data)
+        })
+        .catch(handleError)
+    },
+    login({ commit, dispatch }, user) {
+      auth.post('login', user)
+        .then(res => {
+          commit('setUser', res.data.data)
+        }).catch(handleError)
+    },
+    getAuth({ commit, dispatch }) {
+      auth('authenticate')
+        .then(res => {
+          commit('setUser', res.data.data)
+        }).catch(err => {
+          router.push('/')
+        })
+    },
+    logout({commit, dispatch}, user) {
+      auth.delete('logout', user)
+        .then(res => {
+          commit('setUser', res.data.data)
+        }).catch(handleError)
+    },
+    getvaults({commit, dispatch}, user) {
+      api('user/' + user._id + '/vaults')
+      .then(res => {
+        commit ('setVaults', res.data.data)
+      }).catch(handleError)
+    },
+    getkeeps({commit, dispatch}, user) {
+      api('user/' + user._id + '/keeps')
+      .then(res => {
+        commit('setKeeps', res.data.data)
+      }).catch(handleError)
+    }
   }
 
-}
+})
 
