@@ -85,7 +85,7 @@ export default new Vuex.Store({
           if (res.data.error) {
             return handleError(res.data.error)
           }
-          commit('setUser', res.data.data)
+          commit('setLogin', res.data.data)
         })
         .catch(handleError)
     },
