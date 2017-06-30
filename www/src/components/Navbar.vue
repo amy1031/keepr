@@ -4,11 +4,11 @@
 			<nav class="navbar">
 				<h1 class="navbar-brand mb-0"><router-link :to="'/'">Keepr</router-link></h1>
 			</nav>
-			<span class="navbar-text">Share and discover new interests.</span>
+			<span class="navbar-text">Discover new interests.</span>
 			<div class="ml-auto">
 				<button class="btn btn-primary my-2 my-sm-0 register" type="button" data-toggle="modal" data-target="#register" v-if='user == null'>Register</button>
 				<button class="btn btn-primary my-2 my-sm-0 login" type="button" data-toggle="modal" data-target="#login" v-if='user == null'>Login</button>
-				<span class="navbar-text" v-if="user">Welcome, {{user.name}} &nbsp; <router-link :to="'/dashboard'"><button class="btn btn-outline-info" type="button">Dashboard</button></router-link> <button class="btn btn-outline-warning" @click="logout()">Logout</button></span>
+				<span class="navbar-text welcome" v-if="user">Welcome, {{user.name}} &nbsp; <router-link :to="'/dashboard'"><button class="btn btn-info dashboard" type="button">Dashboard</button></router-link> <button class="btn btn-warning logout" @click="logout()">Logout</button></span>
 			</div>
 		</nav>
 		<!-- Register Modal -->
@@ -113,75 +113,68 @@
 		padding: 0px;
 	}
 
+	.dashboard {
+		margin-right: 10px;
+		background-color: #FF4FE7;
+		padding: 10px 30px 10px 30px;
+		color: #000;
+		border: 0px;
+	}
+
+	.dashboard:hover {
+		background-color: #B973FF;
+	}
+
+	.logout {
+		margin-right: 20px;
+		background-color: #84FF30;
+		padding: 10px 30px 10px 30px;
+		color: #000;
+		border: 0px;
+	}
+
+	.logout:hover {
+		background-color: #D7FF0D;
+	}
 
 	.register {
 		border: 0px solid #64f700;
-		-webkit-border-radius: 3px;
-		-moz-border-radius: 3px;
 		border-radius: 5px;
 		font-size: 16px;
 		padding: 10px 30px 10px 30px;
 		text-decoration: none;
 		display: inline-block;
-		color: #000000;
+		color: #000;
 		background-color: #84FF30;
-		background-image: -webkit-gradient(linear, left top, left bottom, from(#84FF30), to(#D7FF0D));
-		background-image: -webkit-linear-gradient(top, #84FF30, #D7FF0D);
-		background-image: -moz-linear-gradient(top, #84FF30, #D7FF0D);
-		background-image: -ms-linear-gradient(top, #84FF30, #D7FF0D);
-		background-image: -o-linear-gradient(top, #84FF30, #D7FF0D);
-		background-image: linear-gradient(to bottom, #84FF30, #D7FF0D);
-		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#84FF30, endColorstr=#D7FF0D);
-		margin-right: 20px;
+		margin-right: 10px;
 	}
 
 	.register:hover {
-		border: 0px solid #52c900;
-		background-color: #84FF30;
-		background-image: -webkit-gradient(linear, left top, left bottom, from(#84FF30), to(#84FF30));
-		background-image: -webkit-linear-gradient(top, #84FF30, #84FF30);
-		background-image: -moz-linear-gradient(top, #84FF30, #84FF30);
-		background-image: -ms-linear-gradient(top, #84FF30, #84FF30);
-		background-image: -o-linear-gradient(top, #84FF30, #84FF30);
-		background-image: linear-gradient(to bottom, #84FF30, #84FF30);
-		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#84FF30, endColorstr=#84FF30);
+		background-color: #D7FF0D;
 	}
 
-	.login, .logout {
+	.login {
 		border: 0px solid #B973FF;
-		-webkit-border-radius: 3px;
-		-moz-border-radius: 3px;
 		border-radius: 5px;
 		font-size: 16px;
 		padding: 10px 30px 10px 30px;
 		text-decoration: none;
 		display: inline-block;
-		color: #000000;
+		color: #000;
 		background-color: #FF4FE7;
-		background-image: -webkit-gradient(linear, left top, left bottom, from(#FF4FE7), to(#B973FF));
-		background-image: -webkit-linear-gradient(top, #FF4FE7, #B973FF);
-		background-image: -moz-linear-gradient(top, #FF4FE7, #B973FF);
-		background-image: -ms-linear-gradient(top, #FF4FE7, #B973FF);
-		background-image: -o-linear-gradient(top, #FF4FE7, #B973FF);
-		background-image: linear-gradient(to bottom, #FF4FE7, #B973FF);
-		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#FF4FE7, endColorstr=#B973FF);
 		margin-right: 20px;
 	}
 
-	.login:hover, .logout:hover {
-		border: 0px solid #F9C4FF;
-		background-color: #FF4FE7;
-		background-image: -webkit-gradient(linear, left top, left bottom, from(#FF4FE7), to(#FF4FE7));
-		background-image: -webkit-linear-gradient(top, #FF4FE7, #FF4FE7);
-		background-image: -moz-linear-gradient(top, #FF4FE7, #FF4FE7);
-		background-image: -ms-linear-gradient(top, #FF4FE7, #FF4FE7);
-		background-image: -o-linear-gradient(top, #FF4FE7, #FF4FE7);
-		background-image: linear-gradient(to bottom, #FF4FE7, #FF4FE7);
-		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#FF4FE7, endColorstr=#FF4FE7);
+	.login:hover {
+		background-color: #B973FF;
 	}
 
 a, a:hover {
 	color: #fff;
 	text-decoration: none;
+}
+
+.welcome {
+	font-size: 18px;
 }
 </style>

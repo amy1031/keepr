@@ -7,14 +7,9 @@ export default {
     reqType: 'get',
     method(req, res, next) {
       let action = 'Get all keeps that are public'
-      Keeps.find()
+      Keeps.find({ public: true })
         .then(keeps => {
-          for (var i = 0; i < keeps.length; i++) {
-            var keep = keeps[i]
-            if (keep.public == true) {
-              res.send(handleResponse(action, keep))
-            }
-          }
+          res.send(handleResponse(action, keeps))
         }).catch(error => {
           return next(handleResponse(action, null, error))
         })
@@ -64,13 +59,46 @@ export default {
     }
   },
   getKeepsByTag: {
-    path: '/keeps/:tag',
+    path: '/searchkeeps/:tag',
     reqType: 'get',
     method(req, res, next) {
       let action = 'Get keeps by tag'
       Keeps.find({ tags: req.params.tag })
         .then(keeps => {
-          res.send(handleResponse(action, keeps))
+            res.send(handleResponse(action, keeps))
+        }).catch(error => {
+          return next(handleResponse(action, null, error))
+        })
+    }
+  },
+  addKeeptoVault: {
+    path: '/addvaulttokeep/:id',
+    reqType: 'put',
+    method(req, res, next) {
+      let action = "Add a keep to a vault"
+      Keeps.findOne({ _id: req.params.id })
+        .then(keeps => {
+          keeps.vaults.push(req.body.vaults)
+          keeps.keepCount += 1
+          keeps.save().then(() => {
+            res.send(handleResponse(action, keeps))
+          })
+        }).catch(error => {
+          return next(handleResponse(action, null, error))
+        })
+    }
+  },
+  increaseViewCount: {
+    path: '/addviews/:id',
+    reqType: 'put',
+    method(req, res, next) {
+      let action = "Increase Keep View Count"
+      Keeps.findOne({ _id: req.params.id })
+        .then(keeps => {
+          keeps.viewCount += 1
+          keeps.save().then(() => {
+            res.send(handleResponse(action, keeps))
+          })
         }).catch(error => {
           return next(handleResponse(action, null, error))
         })

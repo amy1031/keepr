@@ -22,57 +22,11 @@ let auth = axios.create({
 let state = {
   user: {},
   vaults: {},
-  myKeeps: {},
-  //Dummy Data
-  keeps: [{
-    title: 'Learn to Draw',
-    imgUrl: 'https://s-media-cache-ak0.pinimg.com/564x/b0/7f/71/b07f713b8fa296e871dd8c169ff86fd5.jpg',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, officiis asperiores quisquam, temporibus sint veritatis',
-    keepCount: 100,
-    shareCount: 300,
-    viewCount: 900,
-    author: 'JimyJonJones'
-  }, {
-    title: 'Build Beautiful sites',
-    imgUrl: 'https://s-media-cache-ak0.pinimg.com/236x/1b/81/b4/1b81b4d253053096b4097c53929f04c3.jpg',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, officiis asperiores quisquam, temporibus sint veritatis, doloribus eveniet sapiente perferendis nobis aliquid, quasi ipsa a repudiandae quaerat quos ex quod nemo',
-    keepCount: 100,
-    shareCount: 300,
-    viewCount: 900,
-    author: 'JimyJonJones'
-  }, {
-    title: 'Learn to Draw',
-    imgUrl: 'https://s-media-cache-ak0.pinimg.com/564x/c7/80/e3/c780e34c14258f4087df410f03d76e83.jpg',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, officiis asperiores quisquam, temporibus sint veritatisconsectetur adipisicing elit. Quas, officiis asperiores quisquam, temporibus sint veritatis consectetur adipisicing elit. Quas, officiis asperiores quisquam, temporibus sint veritatis',
-    keepCount: 100,
-    shareCount: 300,
-    viewCount: 900,
-    author: 'JimyJonJones'
-  }, {
-    title: 'Build Beautiful sites',
-    imgUrl: 'https://s-media-cache-ak0.pinimg.com/236x/1b/81/b4/1b81b4d253053096b4097c53929f04c3.jpg',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, officiis asperiores quisquam, temporibus sint veritatis, doloribus eveniet sapiente perferendis nobis aliquid, quasi ipsa a repudiandae quaerat quos ex quod nemo',
-    keepCount: 100,
-    shareCount: 300,
-    viewCount: 900,
-    author: 'JimyJonJones'
-  }, {
-    title: 'Learn to Draw',
-    imgUrl: 'https://s-media-cache-ak0.pinimg.com/564x/b0/7f/71/b07f713b8fa296e871dd8c169ff86fd5.jpg',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, officiis asperiores quisquam, temporibus sint veritatis',
-    keepCount: 100,
-    shareCount: 300,
-    viewCount: 900,
-    author: 'JimyJonJones'
-  }, {
-    title: 'Build Beautiful sites',
-    imgUrl: 'https://s-media-cache-ak0.pinimg.com/236x/1b/81/b4/1b81b4d253053096b4097c53929f04c3.jpg',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, officiis asperiores quisquam, temporibus sint veritatis, doloribus eveniet sapiente perferendis nobis aliquid, quasi ipsa a repudiandae quaerat quos ex quod nemo',
-    keepCount: 100,
-    shareCount: 300,
-    viewCount: 900,
-    author: 'JimyJonJones'
-  }],
+  myKeeps: [],
+  keeps: [],
+  vaultKeeps: [],
+  activeKeep: {},
+  searchResults: {},
   error: {}
 }
 
@@ -87,11 +41,41 @@ export default new Vuex.Store({
       state.user = user
       router.push('/')
     },
+    setLogin(state, user) {
+      state.user = user
+      router.push('/dashboard')
+    },
+    setLogout(state, user) {
+      state.user = user
+      state.vaults = {}
+      router.push('/')
+    },
     setVaults(state, vaults) {
-      state.vaults = vaults
+      Vue.set(state, "vaults", vaults)
     },
     setKeeps(state, keeps) {
       state.myKeeps = keeps
+    },
+    setAllKeeps(state, keeps) {
+      state.keeps = keeps
+    },
+    setCreateVaults(state, vault) {
+      state.vaults.push(vault)
+    },
+    setCreateKeeps(state, keep) {
+      state.myKeeps.push(keep)
+      if (keep.public == true) {
+        state.keeps = keep
+      }
+    },
+    setVaultKeeps(state, keeps) {
+      state.vaultKeeps = keeps
+    },
+    setActiveKeep(state, keep) {
+      state.activeKeep = keep
+    },
+    setSearchKeeps(state, search) {
+      Vue.set(state, "searchResults", search)
     }
   },
   actions: {
@@ -108,7 +92,7 @@ export default new Vuex.Store({
     login({ commit, dispatch }, user) {
       auth.post('login', user)
         .then(res => {
-          commit('setUser', res.data.data)
+          commit('setLogin', res.data.data)
         }).catch(handleError)
     },
     getAuth({ commit, dispatch }) {
@@ -119,23 +103,80 @@ export default new Vuex.Store({
           router.push('/')
         })
     },
-    logout({commit, dispatch}, user) {
+    logout({ commit, dispatch }, user) {
       auth.delete('logout', user)
         .then(res => {
-          commit('setUser', res.data.data)
+          commit('setLogout', res.data.data)
         }).catch(handleError)
     },
-    getvaults({commit, dispatch}, user) {
+    getvaults({ commit, dispatch }, user) {
       api('user/' + user._id + '/vaults')
-      .then(res => {
-        commit ('setVaults', res.data.data)
-      }).catch(handleError)
+        .then(res => {
+          commit('setVaults', res.data.data)
+        }).catch(handleError)
     },
-    getkeeps({commit, dispatch}, user) {
+    getAllKeeps({ commit, dispatch }) {
+      api('keeps')
+        .then(res => {
+          commit('setAllKeeps', res.data.data)
+        }).catch(handleError)
+    },
+    getUserKeeps({ commit, dispatch }, user) {
       api('user/' + user._id + '/keeps')
-      .then(res => {
-        commit('setKeeps', res.data.data)
-      }).catch(handleError)
+        .then(res => {
+          commit('setKeeps', res.data.data)
+        }).catch(handleError)
+    },
+    createVault({ commit, dispatch }, vault) {
+      api.post('vaults', vault)
+        .then(res => {
+          commit('setCreateVaults', res.data.data)
+        }).catch(handleError)
+    },
+    getvaultkeeps({ commit, dispatch }, id) {
+      api('vaults/' + id + '/keeps')
+        .then(res => {
+          commit('setVaultKeeps', res.data.data)
+        }).catch(handleError)
+    },
+    createKeep({ commit, dispatch }, keep) {
+      api.post('keeps', keep)
+        .then(res => {
+          commit('setCreateKeeps', res.data.data)
+        }).catch(handleError)
+    },
+    activeKeep({ commit, dispatch }, keep) {
+      commit('setActiveKeep', keep)
+    },
+    addVaultToKeep({ commit, dispatch }, data) {
+      api.put('addvaulttokeep/' + data.keep._id, data)
+        .then(res => {
+          commit('setActiveKeep', res.data.data)
+        }).catch(handleError)
+    },
+    increaseViewCount({ commit, dispatch }, keep) {
+      api.put('addviews/' + keep._id, keep)
+        .then(res => {
+          commit('setActiveKeep', res.data.data)
+        }).catch(handleError)
+    },
+    deleteKeep({ commit, dispatch }, keep) {
+      api.delete('keeps/' + keep._id)
+        .then(res => {
+          commit('setVaultKeeps', res.data.data)
+        }).catch(handleError)
+    },
+    deleteVault({ commit, dispatch }, vault) {
+      api.delete('vaults/' + vault._id)
+        .then(res => {
+          router.push('/dashboard')
+        }).catch(handleError)
+    },
+    searchKeeps({ commit, dispatch }, tag) {
+      api('searchkeeps/' + tag)
+        .then(res => {
+          commit('setSearchKeeps', res.data.data)
+        }).catch(handleError)
     }
   }
 
