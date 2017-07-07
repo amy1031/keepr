@@ -33,14 +33,19 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/../public'))
 app.use('*', logger)
-//app.use('*', cors(corsOptions))
-app.use('*', cors())
+app.use('*', cors(corsOptions))
 app.use('/', Auth)
 
 // LOCKS API TO REQUIRE USER AUTH
 app.use(Validate)
 app.use('/api', api)
 app.use('/', defaultErrorHandler)
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 
 // let io = require('socket.io')(server, {
