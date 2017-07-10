@@ -79,9 +79,9 @@
 				password: ""
 			}
 		},
-		// mounted() {
-		// 	this.$store.dispatch('getAuth')
-		// },
+		mounted() {
+			this.$store.dispatch('getAuth')
+		},
 		computed: {
 			user() {
 				return this.$store.state.user
