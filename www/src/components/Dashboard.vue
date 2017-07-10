@@ -25,6 +25,7 @@
 			}
 		},
 		mounted() {
+			this.$store.dispatch('getAuth')
 			this.$store.dispatch('getvaults', this.user)
 			this.$store.dispatch('getAllKeeps', this.user)
 		},
