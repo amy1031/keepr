@@ -89,7 +89,7 @@
     },
     mounted() {
       this.$store.dispatch('getAllKeeps')
-      this.$store.dispatch('getvaults', this.user)
+     // this.$store.dispatch('getvaults', this.user)
     },
     computed: {
       keeps() {
