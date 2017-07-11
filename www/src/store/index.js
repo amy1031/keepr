@@ -6,13 +6,13 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 let api = axios.create({
-  baseURL: 'mykeepr.herokuapp.com/api',
+  baseURL: 'http://mykeepr.herokuapp.com/api',
   timeout: 2000,
   withCredentials: true
 })
 
 let auth = axios.create({
-  baseURL: 'mykeepr.herokuapp.com/',
+  baseURL: 'http://mykeepr.herokuapp.com/',
   timeout: 2000,
   withCredentials: true
 })
