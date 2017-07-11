@@ -32,7 +32,7 @@ let state = {
 
 let handleError = (err) => {
   state.error = err
-}
+} 
 
 export default new Vuex.Store({
   state,
